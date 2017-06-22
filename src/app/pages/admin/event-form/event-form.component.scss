@@ -1,0 +1,14 @@
+/*--------------------
+ EVENT FORM COMPONENT
+--------------------*/
+
+:host {
+  display: block;
+  margin-top: 20px;
+}
+.label-inline-group {
+  display: block;
+}
+.has-error {
+  border: 1px solid red;
+}

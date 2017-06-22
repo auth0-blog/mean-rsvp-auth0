@@ -1,0 +1,50 @@
+<app-loading *ngIf="loading"></app-loading>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <h1 class="text-center">{{pageTitle}}</h1>
+  <!-- Event -->
+  <ng-template [ngIf]="event">
+    <!-- Event is over -->
+    <p *ngIf="eventPast" class="alert alert-danger">
+      <strong>This event is over.</strong>
+    </p>
+
+    <div class="card">
+      <!-- Event tab navigation -->
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{tab: 'details'}"
+              [ngClass]="{'active': utils.tabIs(tab, 'details')}">Details</a>
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link"
+              [routerLink]="[]"
+              [queryParams]="{tab: 'rsvp'}"
+              [ngClass]="{'active': utils.tabIs(tab, 'rsvp')}">RSVP</a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Event detail tab -->
+      <app-event-detail
+        *ngIf="utils.tabIs(tab, 'details')"
+        [event]="event"></app-event-detail>
+
+      <!-- Event RSVP tab -->
+      <app-rsvp
+        *ngIf="utils.tabIs(tab, 'rsvp')"
+        [eventId]="event._id"
+        [eventPast]="eventPast"></app-rsvp>
+    </div>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving information for this event.
+  </p>
+</ng-template>

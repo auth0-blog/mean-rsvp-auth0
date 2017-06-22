@@ -1,0 +1,30 @@
+<p class="lead">
+  You are deleting the "<strong [innerHTML]="event.title"></strong>" event.
+</p>
+
+<p class="text-danger">
+  Deleting this event will also remove all associated RSVPs. Please proceed with caution!
+</p>
+
+<div class="form-group">
+  <label for="deleteEvent">Confirm event title:</label>
+  <input
+    type="text"
+    id="deleteEvent"
+    class="form-control"
+    [(ngModel)]="confirmDelete">
+</div>
+
+<!-- Delete button -->
+<p>
+  <button
+    class="btn btn-danger"
+    (click)="removeEvent()"
+    [disabled]="confirmDelete !== event.title || submitting">Delete Event</button>
+  <app-submitting *ngIf="submitting"></app-submitting>
+</p>
+
+<!-- Error deleting event -->
+<p *ngIf="error" class="alert alert-danger">
+  <strong>Oops!</strong> There was an error deleting this event. Please try again.
+</p>

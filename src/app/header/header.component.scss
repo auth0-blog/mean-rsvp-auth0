@@ -1,0 +1,131 @@
+/*--------------------
+       HEADER
+--------------------*/
+
+@import '../../assets/scss/partials/layout.vars';
+
+/*-- Navigation --*/
+
+.nav {
+  background: #eee;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow: inset -8px 0 8px -6px rgba(0,0,0,0.2);
+  display: none; /* deal with FOUC */
+  height: 100%;
+  overflow-y: auto;
+  padding: $padding-screen-small;
+  position: absolute;
+    top: 0;
+  transform: translate3d(-100%,0,0);
+  width: 270px;
+
+  :host-context(.nav-closed) &,
+  :host-context(.nav-open) & {
+    display: block; /* deal with FOUC */
+  }
+  .active {
+    font-weight: bold;
+  }
+  &-list {
+    list-style: none;
+    margin-bottom: 0;
+    padding-left: 0;
+
+    a {
+      display: block;
+      padding: 6px;
+
+      &:hover,
+      &:active,
+      &:focus {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+/*-- Hamburger toggle --*/
+
+.toggle-offcanvas {
+  border-right: 1px solid rgba(255,255,255,.5);
+  display: inline-block;
+  height: 50px;
+  padding: 23.5px 13px;
+  position: relative;
+  text-align: center;
+  width: 50px;
+  z-index: 100;
+
+  span,
+  span:before,
+  span:after {
+    background: #fff;
+    border-radius: 1px;
+    content: '';
+    display: block;
+    height: 3px;
+    position: absolute;
+    transition: all 250ms ease-in-out;
+    width: 24px;
+  }
+  span {
+    &:before {
+      top: -9px;
+    }
+    &:after {
+      bottom: -9px;
+    }
+  }
+  :host-context(.nav-open) & {
+    span {
+      background: transparent;
+
+      &:before,
+      &:after {
+        top: 0;
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+      &:after {
+        transform: rotate(-45deg);
+      }
+    }
+  }
+}
+
+/*-- Header and title --*/
+
+.header-page {
+  color: #fff;
+  height: 50px;
+  margin-bottom: 10px;
+  position: relative;
+
+  &-siteTitle {
+    font-size: 30px;
+    line-height: 50px;
+    margin: 0;
+    padding: 0 0 0 60px;
+    position: absolute;
+      top: 0;
+    width: 100%;
+  }
+  a {
+    color: #fff;
+    text-decoration: none;
+  }
+  &-authStatus {
+    color: #fff;
+    font-size: 12px;
+    line-height: 50px;
+    padding: 0 10px;
+    position: absolute;
+      right: 0; top: 0;
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}

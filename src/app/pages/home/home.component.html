@@ -1,0 +1,54 @@
+<h1 class="text-center">{{pageTitle}}</h1>
+<app-loading *ngIf="loading"></app-loading>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="eventList">
+    <ng-template [ngIf]="eventList.length">
+      <!-- Search events -->
+      <section class="search input-group mb-3">
+        <label class="input-group-addon" for="search">Search</label>
+        <input
+          id="search"
+          type="text"
+          class="form-control"
+          [(ngModel)]="query"
+          (keyup)="searchEvents()" />
+        <span class="input-group-btn">
+          <button
+            class="btn btn-danger"
+            (click)="resetQuery()"
+            [disabled]="!query">&times;</button>
+        </span>
+      </section>
+
+      <!-- No search results -->
+      <p *ngIf="fs.noSearchResults(filteredEvents, query)" class="alert alert-warning">
+        No events found for <em class="text-danger">{{query}}</em>, sorry!
+      </p>
+
+      <!-- Events listing -->
+      <section class="list-group">
+        <a
+          *ngFor="let event of fs.orderByDate(filteredEvents, 'startDatetime')"
+          [routerLink]="['/event', event._id]"
+          class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" [innerHTML]="event.title"></h5>
+            <small>{{utils.eventDates(event.startDatetime, event.endDatetime)}}</small>
+          </div>
+        </a>
+      </section>
+    </ng-template>
+
+    <!-- No upcoming public events available -->
+    <p *ngIf="!eventList.length" class="alert alert-info">
+      No upcoming public events available.
+    </p>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving event data.
+  </p>
+
+</ng-template>

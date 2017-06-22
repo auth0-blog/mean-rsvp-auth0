@@ -1,0 +1,107 @@
+<form (ngSubmit)="onSubmit()" #rsvpForm="ngForm">
+  <!-- Name -->
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input
+      id="name"
+      name="name"
+      type="text"
+      class="form-control"
+      minlength="3"
+      maxlength="24"
+      #name="ngModel"
+      [(ngModel)]="formRsvp.name"
+      required>
+    <div
+      *ngIf="name.errors && name.dirty"
+      class="small text-danger formErrors">
+      <div [hidden]="!name.errors.required">
+        Name is <strong>required</strong>.
+      </div>
+      <div [hidden]="!name.errors.minlength">
+        Name must be 3 characters or more.
+      </div>
+    </div>
+  </div>
+
+  <!-- Attending -->
+  <div class="form-group">
+    <label class="label-inline-group">Will you be attending?</label>
+    <div class="form-check form-check-inline">
+      <label class="form-check-label">
+        <input
+          id="attending-yes"
+          name="attending"
+          type="radio"
+          class="form-check-input"
+          (change)="changeAttendanceSetGuests()"
+          [value]="true"
+          [(ngModel)]="formRsvp.attending"
+          required> Yes
+      </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <label class="form-check-label">
+        <input
+          id="attending-no"
+          name="attending"
+          type="radio"
+          class="form-check-input"
+          (change)="changeAttendanceSetGuests()"
+          [value]="false"
+          [(ngModel)]="formRsvp.attending"
+          required> No
+      </label>
+    </div>
+  </div>
+
+  <!-- Guests -->
+  <div *ngIf="formRsvp.attending" class="formGuests form-group row">
+    <label for="guests" class="col-12">Additional Guests:</label>
+    <input
+      id="guests"
+      name="guests"
+      type="number"
+      class="form-control col-sm-12 col-md-3"
+      maxlength="1"
+      [pattern]="GUESTS_REGEX"
+      step="1"
+      min="0"
+      max="9"
+      #guests="ngModel"
+      [(ngModel)]="formRsvp.guests">
+    <div
+      *ngIf="guests.errors && guests.dirty"
+      class="col-12 small text-danger formErrors">
+      <div [hidden]="!guests.errors.pattern">
+        Additional Guests must be an integer from <strong>0-9</strong>.
+      </div>
+    </div>
+  </div>
+
+  <!-- Comments -->
+  <div class="form-group">
+    <label for="comments">Comments:</label>
+    <textarea
+      id="comments"
+      name="comments"
+      class="form-control"
+      rows="2"
+      maxlength="300"
+      [(ngModel)]="formRsvp.comments"></textarea>
+  </div>
+
+  <!-- Submit -->
+  <div class="form-group">
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="!rsvpForm.form.valid || submitting">Submit RSVP</button>
+    <app-submitting *ngIf="submitting"></app-submitting>
+
+    <!-- API submission error -->
+    <p *ngIf="error" class="mt-3 alert alert-danger">
+      <strong>Error:</strong> There was a problem submitting your response. Please try again.
+    </p>
+  </div>
+</form>

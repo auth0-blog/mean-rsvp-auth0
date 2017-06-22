@@ -1,0 +1,87 @@
+<h1 class="text-center">{{pageTitle}}</h1>
+<app-loading *ngIf="loading"></app-loading>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <p class="lead">Welcome, {{auth.userProfile?.name}}! You can create and administer events below.</p>
+
+  <p>
+    <a
+      class="btn btn-success btn-block"
+      routerLink="/admin/event/new">+ Create New Event</a>
+  </p>
+
+  <!-- Events -->
+  <ng-template [ngIf]="eventList">
+    <ng-template [ngIf]="eventList.length">
+      <!-- Search events -->
+      <section class="search input-group mb-3">
+        <label class="input-group-addon" for="search">Search</label>
+        <input
+          id="search"
+          type="text"
+          class="form-control"
+          [(ngModel)]="query"
+          (keyup)="searchEvents()" />
+        <span class="input-group-btn">
+          <button
+            class="btn btn-danger"
+            (click)="resetQuery()"
+            [disabled]="!query">&times;</button>
+        </span>
+      </section>
+
+      <!-- No search results -->
+      <p *ngIf="fs.noSearchResults(filteredEvents, query)" class="alert alert-warning">
+        No events found for <em class="text-danger">{{query}}</em>, sorry!
+      </p>
+
+      <!-- Events listing -->
+      <section class="list-group">
+        <div
+          *ngFor="let event of fs.orderByDate(filteredEvents, 'startDatetime')"
+          class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <a [routerLink]="['/event', event._id]">
+              <h5 class="mb-1" [innerHTML]="event.title"></h5>
+            </a>
+            <div class="event-icons">
+              <img
+                *ngIf="!event.viewPublic"
+                class="event-icon"
+                title="Private"
+                src="/assets/images/eye.svg">
+              <img
+                *ngIf="utils.eventPast(event.endDatetime)"
+                class="event-icon"
+                title="Event is over"
+                src="/assets/images/calendar.svg">
+            </div>
+          </div>
+          <p class="mb-1">
+            <strong>Date:</strong> {{utils.eventDates(event.startDatetime, event.endDatetime)}}
+          </p>
+          <p class="mb-1">
+            <a
+              class="btn btn-info btn-sm"
+              [routerLink]="['/admin/event/update', event._id]">Edit</a>
+            <a
+              class="btn btn-danger btn-sm"
+              [routerLink]="['/admin/event/update', event._id]"
+              [queryParams]="{tab: 'delete'}">Delete</a>
+          </p>
+        </div>
+      </section>
+    </ng-template>
+
+    <!-- No events available -->
+    <p *ngIf="!eventList.length" class="alert alert-info">
+      No events have been created yet.
+    </p>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error retrieving event data.
+  </p>
+
+</ng-template>

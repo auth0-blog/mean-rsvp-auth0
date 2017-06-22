@@ -1,0 +1,107 @@
+<div class="card-block">
+  <h2 class="card-title text-center">RSVP</h2>
+  <app-loading *ngIf="loading"></app-loading>
+</div>
+
+<!-- Event is over -->
+<p *ngIf="eventPast" class="card-block lead">
+  You cannot RSVP to an event that has already ended.
+</p>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="!eventPast && rsvps">
+
+    <!-- User has RSVPed -->
+    <ng-template [ngIf]="userRsvp">
+      <p class="card-block lead">You responded to this event with the following information:</p>
+
+      <ul *ngIf="!showEditForm" class="list-group list-group-flush">
+        <li class="list-group-item">
+          <strong>Name:</strong>{{userRsvp.name}}
+        </li>
+        <li class="list-group-item">
+          <strong>Attending:</strong>{{utils.booleanToText(userRsvp.attending)}}
+        </li>
+        <li *ngIf="userRsvp.attending && userRsvp.guests" class="list-group-item">
+          <strong>Additional Guests:</strong>{{userRsvp.guests}}
+        </li>
+        <li *ngIf="userRsvp.comments" class="list-group-item">
+          <strong>Comments:</strong><span [innerHTML]="userRsvp.comments"></span>
+        </li>
+      </ul>
+
+      <div class="card-block">
+        <button
+          class="btn btn-info"
+          [ngClass]="{'btn-info': !showEditForm, 'btn-warning': showEditForm}"
+          (click)="toggleEditForm()">{{editBtnText}}</button>
+
+        <app-rsvp-form
+          *ngIf="showEditForm"
+          [eventId]="eventId"
+          [rsvp]="userRsvp"
+          (submitRsvp)="onSubmitRsvp($event)"></app-rsvp-form>
+      </div>
+    </ng-template>
+
+    <!-- No RSVP yet -->
+    <div *ngIf="!userRsvp" class="card-block">
+      <p class="lead">Fill out the form below to respond:</p>
+
+      <app-rsvp-form
+        [eventId]="eventId"
+        (submitRsvp)="onSubmitRsvp($event)"></app-rsvp-form>
+    </div>
+  </ng-template>
+
+  <!-- All RSVPs -->
+  <div class="card-block text-right">
+    <button (click)="toggleShowRsvps()" class="btn btn-link btn-sm">{{showRsvpsText}}</button>
+  </div>
+
+  <section class="allRsvps" *ngIf="showAllRsvps" [@expandCollapse]>
+    <div class="card-block">
+      <h3 class="card-title text-center">All RSVPs</h3>
+      <p *ngIf="!rsvps.length" class="lead">There are currently no RSVPs for this event.</p>
+    </div>
+
+    <ul *ngIf="rsvps.length" class="list-group list-group-flush">
+      <li class="list-group-item list-group-item-success justify-content-between">
+        <strong>Attending</strong>
+        <span class="badge badge-success badge-pill">{{totalAttending}}</span>
+      </li>
+      <li
+        *ngFor="let rsvp of fs.filter(rsvps, 'attending', true)"
+        class="list-group-item small">
+        {{rsvp.name}} {{utils.showPlusOnes(rsvp.guests)}}
+        <p *ngIf="auth.isAdmin && rsvp.comments" class="d-flex w-100">
+          <em [innerHTML]="rsvp.comments"></em>
+        </p>
+      </li>
+      <li class="list-group-item list-group-item-danger justify-content-between">
+        <strong>Not Attending</strong>
+        <span class="badge badge-danger badge-pill">{{fs.filter(rsvps, 'attending', false).length}}</span>
+      </li>
+      <li
+        *ngFor="let rsvp of fs.filter(rsvps, 'attending', false)"
+        class="list-group-item small">
+        {{rsvp.name}}
+        <p *ngIf="auth.isAdmin && rsvp.comments" class="d-flex w-100">
+          <em [innerHTML]="rsvp.comments"></em>
+        </p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Error loading RSVPs -->
+  <div *ngIf="error" class="card-block">
+    <p class="alert alert-danger">
+      <strong>Oops!</strong> There was an error retrieving RSVPs for this event.
+    </p>
+  </div>
+</ng-template>
+
+<!-- Footer showing # of total attending guests -->
+<div class="card-footer text-right">
+  <small *ngIf="totalAttending >= 0" class="text-muted">{{utils.displayCount(totalAttending)}} {{footerTense}}</small>
+</div>

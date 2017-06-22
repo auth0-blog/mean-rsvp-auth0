@@ -1,0 +1,21 @@
+<div class="card-block">
+  <h2 class="card-title text-center">Event Details</h2>
+</div>
+
+<ul class="list-group list-group-flush">
+  <li class="list-group-item">
+    <strong>When:</strong>{{utils.eventDatesTimes(event.startDatetime, event.endDatetime)}}
+  </li>
+  <li class="list-group-item">
+    <strong>Where:</strong>{{event.location}} (<a href="https://www.google.com/maps/dir//{{event.location}}" target="_blank">get directions</a>)
+  </li>
+</ul>
+
+<p
+  *ngIf="event.description"
+  class="card-block lead"
+  [innerHTML]="event.description"></p>
+
+<div *ngIf="auth.isAdmin" class="card-footer text-right small">
+  <a [routerLink]="['/admin/event/update', event._id]">Edit</a>
+</div>

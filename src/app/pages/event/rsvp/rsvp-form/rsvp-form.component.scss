@@ -1,0 +1,23 @@
+/*--------------------
+ RSVP FORM COMPONENT
+--------------------*/
+
+:host {
+  display: block;
+  margin-top: 20px;
+}
+.formGuests {
+  &.row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  label,
+  .formErrors.col-12 {
+    padding-left: 0;
+    padding-right: 0;
+    
+  }
+}
+.label-inline-group {
+  display: block;
+}

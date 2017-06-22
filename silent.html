@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.auth0.com/js/auth0/8.7/auth0.min.js"></script>
+  <script>
+    const AUTH0_CLIENT_ID = '[YOUR_CLIENT_ID]';
+    const AUTH0_DOMAIN = '[YOUR_DOMAIN].auth0.com';
+
+    const webAuth = new auth0.WebAuth({
+      clientID: AUTH0_CLIENT_ID,
+      domain: AUTH0_DOMAIN,
+      scope: 'openid profile',
+      responseType: 'token id_token',
+      redirectUri: '[YOUR_URL]'
+    });
+
+    webAuth.parseHash(window.location.hash, function (err, response) {
+      parent.postMessage(err || response, '[YOUR_URL]');
+    });
+  </script>
+</head>
+<body></body>
+</html>

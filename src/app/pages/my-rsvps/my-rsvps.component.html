@@ -1,0 +1,42 @@
+<h1 class="text-center">{{pageTitle}}</h1>
+<p class="lead" *ngIf="auth.loggedIn">
+  Hello, <strong [innerHTML]="auth.userProfile.name"></strong>! You logged in with {{userIdp}}.
+  <ng-template [ngIf]="auth.isAdmin">
+    You may <a routerLink="/admin">create and administer events</a>.
+  </ng-template>
+</p>
+
+<app-loading *ngIf="loading"></app-loading>
+
+<ng-template [ngIf]="utils.isLoaded(loading)">
+  <ng-template [ngIf]="eventList">
+    <!-- Event list retrieved but no RSVPs yet -->
+    <p *ngIf="!eventList.length" class="lead">
+      You have not RSVPed to any events yet. Check out the <a routerLink="/">homepage</a> to see a list of upcoming events.
+    </p>
+
+    <ng-template [ngIf]="eventList.length">
+      <p class="lead">You have <strong>RSVPed</strong> for the following upcoming events:</p>
+
+      <!-- Events listing -->
+      <div class="list-group">
+        <a
+          *ngFor="let event of fs.orderByDate(eventList, 'startDatetime')"
+          [routerLink]="['/event', event._id]"
+          [queryParams]="{tab: 'rsvp'}"
+          class="list-group-item list-group-item-action flex-column align-items-start">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1" [innerHTML]="event.title"></h5>
+            <small>{{utils.eventDates(event.startDatetime, event.endDatetime)}}</small>
+          </div>
+          <small class="mb-1">Click to view or update this RSVP</small>
+        </a>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <!-- Error loading events -->
+  <p *ngIf="error" class="alert alert-danger">
+    <strong>Oops!</strong> There was an error getting your RSVP data.
+  </p>
+</ng-template>
