@@ -35,7 +35,7 @@ module.exports = function(app, config) {
     if (roles.indexOf('admin') > -1) {
       next();
     } else {
-      res.status(401).send('Not authorized for admin access');
+      res.status(401).send({message: 'Not authorized for admin access'});
     }
   }
 
