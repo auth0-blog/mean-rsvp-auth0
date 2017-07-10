@@ -10,7 +10,7 @@ import { ENV } from './../core/env.config';
 @Injectable()
 export class AuthService {
   // Create Auth0 web auth instance
-  auth0 = new auth0.WebAuth({
+  private _auth0 = new auth0.WebAuth({
     clientID: AUTH_CONFIG.CLIENT_ID,
     domain: AUTH_CONFIG.CLIENT_DOMAIN,
     responseType: 'token id_token',
@@ -54,12 +54,12 @@ export class AuthService {
     const _redirect = redirect ? redirect : this.router.url;
     localStorage.setItem('authRedirect', _redirect);
     // Auth0 authorize request
-    this.auth0.authorize();
+    this._auth0.authorize();
   }
 
   handleAuth() {
     // When Auth0 hash parsed, get profile
-    this.auth0.parseHash((err, authResult) => {
+    this._auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         window.location.hash = '';
         this._getProfile(authResult);
@@ -73,7 +73,7 @@ export class AuthService {
 
   private _getProfile(authResult) {
     // Use access token to retrieve user's profile and set session
-    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+    this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
       if (profile) {
         this._setSession(authResult, profile);
         this._redirect();
@@ -156,7 +156,7 @@ export class AuthService {
   }
 
   renewToken() {
-    this.auth0.renewAuth({
+    this._auth0.renewAuth({
       redirectUri: AUTH_CONFIG.SILENT_REDIRECT,
       usePostMessage: true
     }, (err, authResult) => {
