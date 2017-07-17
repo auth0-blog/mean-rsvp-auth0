@@ -69,3 +69,6 @@ input:-ms-input-placeholder { /* IE 10+ */
 .opacity-half {
   opacity: .5;
 }
+.list-group-item > strong {
+  padding-right: 5px;
+}

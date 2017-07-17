@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
 import { Observable } from 'rxjs/Rx';
-import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import { ENV } from './env.config';
 import { EventModel } from './models/event.model';
