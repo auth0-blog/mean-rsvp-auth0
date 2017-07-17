@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -16,7 +16,7 @@ import { FooterComponent } from './../footer/footer.component';
 @NgModule({
   imports: [
     CommonModule,
-    HttpModule,
+    HttpClientModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule
@@ -35,7 +35,7 @@ import { FooterComponent } from './../footer/footer.component';
     FilterSortService
   ],
   exports: [
-    HttpModule,
+    HttpClientModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,

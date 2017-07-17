@@ -2,6 +2,6 @@
     EVENT COMPONENT
 --------------------*/
 
-:host /deep/ .list-group-item > strong {
+:host ::ng-deep .list-group-item > strong {
   padding-right: 5px;
 }
