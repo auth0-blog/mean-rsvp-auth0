@@ -15,7 +15,7 @@ export const AUTH_CONFIG: AuthConfig = {
   CLIENT_DOMAIN: '[AUTH0_CLIENT_DOMAIN]', // e.g., kmaida.auth0.com
   AUDIENCE: '[YOUR_AUTH0_API_AUDIENCE]', // e.g., http://localhost:8083/api/
   REDIRECT: `${ENV.BASE_URI}/callback`,
-  SILENT_REDIRECT: `${ENV.BASE_URI}/silent`,
+  SILENT_REDIRECT: 'http://localhost:8083/silent',
   SCOPE: 'openid profile',
   NAMESPACE: 'http://myapp.com/roles'
 };
