@@ -6,17 +6,18 @@
   <script>
     const AUTH0_CLIENT_ID = '[YOUR_CLIENT_ID]';
     const AUTH0_DOMAIN = '[YOUR_DOMAIN]'; // e.g., kmaida.auth0.com
+    const URL = '[YOUR_URL]'; // PRODUCTION: e.g., https://rsvp.kmaida.net, DEV: http://localhost:4200, LOCAL PROD BUILD: http://localhost:8083
 
     const webAuth = new auth0.WebAuth({
       clientID: AUTH0_CLIENT_ID,
       domain: AUTH0_DOMAIN,
       scope: 'openid profile',
       responseType: 'token id_token',
-      redirectUri: '[YOUR_URL]'
+      redirectUri: URL
     });
 
     webAuth.parseHash(window.location.hash, function (err, response) {
-      parent.postMessage(err || response, '[YOUR_URL]');
+      parent.postMessage(err || response, URL);
     });
   </script>
 </head>
