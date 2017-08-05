@@ -30,7 +30,7 @@ $ NODE_ENV=dev nodemon server
 
 Available on `http://localhost:4200/`. 
 
-## Build
+## Build (local)
 
 ```
 $ ng build --prod
@@ -38,6 +38,10 @@ $ node server
 ```
 
 Available on `http://localhost:8083`.
+
+## Deploy
+
+To prep the app in this repo for production deployment, follow instructions here: [Real-World Angular Series - Part 8](https://auth0.com/blog/real-world-angular-series-part-8/#deploy).
 
 ## What is Auth0?
 
