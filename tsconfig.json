@@ -16,5 +16,12 @@
       "es2016",
       "dom"
     ]
-  }
+  },
+  "angularCompilerOptions": {
+    "preserveWhitespaces": false
+  },
+  "exclude": [
+      "test.ts",
+      "**/*.spec.ts"
+  ]
 }
