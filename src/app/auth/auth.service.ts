@@ -156,20 +156,19 @@ export class AuthService {
   }
 
   renewToken() {
-    this._auth0.renewAuth({
-      redirectUri: AUTH_CONFIG.SILENT_REDIRECT,
-      usePostMessage: true
-    }, (err, authResult) => {
-      if (authResult && authResult.accessToken) {
-        this._setSession(authResult);
-      } else if (err) {
-        console.warn(`Could not renew token: ${err.errorDescription}`);
-        // Log out without redirecting to clear auth data
-        this.logout(true);
-        // Log in again
-        this.login();
+    this._auth0.checkSession({},
+      (err, authResult) => {
+        if (authResult && authResult.accessToken) {
+          this._setSession(authResult);
+        } else if (err) {
+          console.warn(`Could not renew token: ${err.errorDescription}`);
+          // Log out without redirecting to clear auth data
+          this.logout(true);
+          // Log in again
+          this.login();
+        }
       }
-    });
+    );
   }
 
   scheduleRenewal() {
