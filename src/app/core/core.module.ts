@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, ModuleWithProviders } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,13 +27,6 @@ import { FooterComponent } from './../footer/footer.component';
     LoadingComponent,
     SubmittingComponent
   ],
-  providers: [
-    Title,
-    DatePipe,
-    ApiService,
-    UtilsService,
-    FilterSortService
-  ],
   exports: [
     HttpClientModule,
     RouterModule,
@@ -45,4 +38,17 @@ import { FooterComponent } from './../footer/footer.component';
     SubmittingComponent
   ]
 })
-export class CoreModule { }
+export class CoreModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: CoreModule,
+      providers: [
+        Title,
+        DatePipe,
+        ApiService,
+        UtilsService,
+        FilterSortService
+      ]
+    };
+  }
+}

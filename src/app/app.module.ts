@@ -22,8 +22,8 @@ import { MyRsvpsComponent } from './pages/my-rsvps/my-rsvps.component';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    AuthModule,
-    CoreModule
+    AuthModule.forRoot(),
+    CoreModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]
