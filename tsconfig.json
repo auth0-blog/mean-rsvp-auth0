@@ -21,7 +21,7 @@
     "preserveWhitespaces": false
   },
   "exclude": [
-      "test.ts",
-      "**/*.spec.ts"
+    "test.ts",
+    "**/*.spec.ts"
   ]
 }
