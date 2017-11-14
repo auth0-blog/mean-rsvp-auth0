@@ -26,9 +26,10 @@ export class UtilsService {
   eventDatesTimes(start, end): string {
     // Display single-day events as "1/7/2018, 5:30 PM - 7:30 PM"
     // Display multi-day events as "8/12/2017, 8:00 PM - 8/13/2017, 10:00 AM"
-    const startDate = this.datePipe.transform(start, 'shortDate');
+    const _shortDate = 'M/d/yyyy';
+    const startDate = this.datePipe.transform(start, _shortDate);
     const startTime = this.datePipe.transform(start, 'shortTime');
-    const endDate = this.datePipe.transform(end, 'shortDate');
+    const endDate = this.datePipe.transform(end, _shortDate);
     const endTime = this.datePipe.transform(end, 'shortTime');
 
     if (startDate === endDate) {
