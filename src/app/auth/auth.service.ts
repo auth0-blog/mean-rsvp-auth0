@@ -4,7 +4,10 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
 import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/timer';
+import 'rxjs/add/operator/mergeMap';
 import { ENV } from './../core/env.config';
 
 @Injectable()
@@ -179,7 +182,7 @@ export class AuthService {
     // Create and subscribe to expiration observable
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     const expiresIn$ = Observable.of(expiresAt)
-      .flatMap(
+      .mergeMap(
         expires => {
           const now = Date.now();
           // Use timer to track delay until expiration
