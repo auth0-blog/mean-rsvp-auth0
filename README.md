@@ -18,30 +18,29 @@ $ npm install
 ## Setup
 
 * Add your Auth0 credentials and remove `.SAMPLE`: `server/config.js.SAMPLE`
-* Add your Auth0 credentials: `silent.html`
 * Add your Auth0 credentials: `src/app/auth/auth.config.ts`
 
 ## Development server
 
-```
-$ ng serve
-$ NODE_ENV=dev nodemon server
+```bash
+$ ng serve // client
+$ NODE_ENV=dev nodemon server // server
 ```
 
-Available on `http://localhost:4200/`. 
+Available at `http://localhost:4200`. 
 
 ## Build (local)
 
 ```
-$ ng build --prod
-$ node server
+$ ng build --prod // client
+$ node server // server
 ```
 
 Available on `http://localhost:8083`.
 
 ## Deploy
 
-To prep the app in this repo for production deployment, follow instructions here: [Real-World Angular Series - Part 8](https://auth0.com/blog/real-world-angular-series-part-8/#deploy).
+To deploy the app in this repo to a production environment, follow the instructions here: [Real-World Angular Series - Part 8](https://auth0.com/blog/real-world-angular-series-part-8/#deploy).
 
 ## What is Auth0?
 
