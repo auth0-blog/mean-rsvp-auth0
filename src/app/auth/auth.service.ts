@@ -5,9 +5,9 @@ import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
+import { mergeMap } from 'rxjs/operators';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/mergeMap';
 import { ENV } from './../core/env.config';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class AuthService {
   private _auth0 = new auth0.WebAuth({
     clientID: AUTH_CONFIG.CLIENT_ID,
     domain: AUTH_CONFIG.CLIENT_DOMAIN,
-    responseType: 'token id_token',
+    responseType: 'token',
     redirectUri: AUTH_CONFIG.REDIRECT,
     audience: AUTH_CONFIG.AUDIENCE,
     scope: AUTH_CONFIG.SCOPE
@@ -91,7 +91,6 @@ export class AuthService {
     // Set tokens and expiration in localStorage
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + Date.now());
     localStorage.setItem('access_token', authResult.accessToken);
-    localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
     // If initial login, set profile and admin information
     if (profile) {
@@ -135,7 +134,6 @@ export class AuthService {
   logout(noRedirect?: boolean) {
     // Ensure all auth items removed from localStorage
     localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
     localStorage.removeItem('isAdmin');
     localStorage.removeItem('expires_at');
@@ -181,15 +179,16 @@ export class AuthService {
     this.unscheduleRenewal();
     // Create and subscribe to expiration observable
     const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    const expiresIn$ = Observable.of(expiresAt)
-      .mergeMap(
+    const expiresIn$ = Observable.of(expiresAt).pipe(
+      mergeMap(
         expires => {
           const now = Date.now();
           // Use timer to track delay until expiration
           // to run the refresh at the proper time
           return Observable.timer(Math.max(1, expires - now));
         }
-      );
+      )
+    );
 
     this.refreshSub = expiresIn$
       .subscribe(
