@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/catch';
+import { catchError } from 'rxjs/operators';
 import 'rxjs/add/observable/throw';
 import { ENV } from './env.config';
 import { EventModel } from './models/event.model';
@@ -22,7 +22,9 @@ export class ApiService {
   getEvents$(): Observable<EventModel[]> {
     return this.http
       .get(`${ENV.BASE_API}events`)
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // GET all events - private and public (admin only)
@@ -31,7 +33,9 @@ export class ApiService {
       .get(`${ENV.BASE_API}events/admin`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // GET an event by ID (login required)
@@ -40,7 +44,9 @@ export class ApiService {
       .get(`${ENV.BASE_API}event/${id}`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // GET RSVPs by event ID (login required)
@@ -49,7 +55,9 @@ export class ApiService {
       .get(`${ENV.BASE_API}event/${eventId}/rsvps`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // POST new event (admin only)
@@ -58,7 +66,9 @@ export class ApiService {
       .post(`${ENV.BASE_API}event/new`, event, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // PUT existing event (admin only)
@@ -67,7 +77,9 @@ export class ApiService {
       .put(`${ENV.BASE_API}event/${id}`, event, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // DELETE existing event and all associated RSVPs (admin only)
@@ -76,7 +88,9 @@ export class ApiService {
       .delete(`${ENV.BASE_API}event/${id}`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // GET all events a specific user has RSVPed to (login required)
@@ -85,7 +99,9 @@ export class ApiService {
       .get(`${ENV.BASE_API}events/${userId}`, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // POST new RSVP (login required)
@@ -94,7 +110,9 @@ export class ApiService {
       .post(`${ENV.BASE_API}rsvp/new`, rsvp, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
   // PUT existing RSVP (login required)
@@ -103,10 +121,12 @@ export class ApiService {
       .put(`${ENV.BASE_API}rsvp/${id}`, rsvp, {
         headers: new HttpHeaders().set('Authorization', this._authHeader)
       })
-      .catch(this._handleError);
+      .pipe(
+        catchError((error) => this._handleError(error))
+      );
   }
 
-  private _handleError(err: HttpErrorResponse | any) {
+  private _handleError(err: HttpErrorResponse | any): Observable<any> {
     const errorMsg = err.message || 'Error: Unable to complete request.';
     if (err.message && err.message.indexOf('No JWT present') > -1) {
       this.auth.login();
