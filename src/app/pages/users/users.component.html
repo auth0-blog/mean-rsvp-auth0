@@ -1,0 +1,18 @@
+<h1 class="text-center">{{pageTitle}}</h1>
+<app-loading *ngIf="loading"></app-loading>
+
+<!-- User listing -->
+<table class="table table-bordered table-hover">
+  <thead>
+    <tr>
+      <th>Sr.No.</th>
+      <th>Users</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of eventList; index as i">
+      <td>{{i+1}}</td>
+      <td>{{user.name}}</td>
+    </tr>
+  </tbody>
+</table>

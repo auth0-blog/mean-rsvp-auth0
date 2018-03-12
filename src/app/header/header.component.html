@@ -30,6 +30,12 @@
       </li>
       <li>
         <a
+          *ngIf="auth.loggedIn"
+          routerLink="/user"
+          routerLinkActive="active">User</a>
+      </li>
+      <li>
+        <a
           *ngIf="auth.loggedIn && auth.isAdmin"
           routerLink="/admin"
           routerLinkActive="active"
