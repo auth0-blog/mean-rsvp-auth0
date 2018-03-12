@@ -16,7 +16,6 @@ export class UserComponent implements OnInit, OnDestroy {
   pageTitle = 'UserList';
   eventsSub: Subscription;
   eventList: RsvpModel[];
-  filteredEvents: RsvpModel[];
   loading: boolean;
   error: boolean;
   query = '';
@@ -40,9 +39,8 @@ export class UserComponent implements OnInit, OnDestroy {
       .getRsvpsName$()
       .subscribe(
         res => {
-          alert(res[0].name)
           this.eventList = res;
-          this.filteredEvents = res;
+        
           this.loading = false;
         },
         err => {
@@ -53,17 +51,18 @@ export class UserComponent implements OnInit, OnDestroy {
       );
   }
 
-  searchEvents() {
-    this.filteredEvents = this.fs.search(this.eventList, this.query, '_id', 'mediumDate');
-  }
 
-  resetQuery() {
-    this.query = '';
-    this.filteredEvents = this.eventList;
-  }
 
   ngOnDestroy() {
     this.eventsSub.unsubscribe();
   }
+  //userlist searching
+  key: string = 'name';
+  reverse: boolean = false;
+  sort(key){
+    this.key = key;
+    this.reverse = !this.reverse;
+  }
+  p: number = 1;
 
 }

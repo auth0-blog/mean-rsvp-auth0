@@ -46,6 +46,7 @@ module.exports = function(app, config) {
  */
 
   const _eventListProjection = 'title startDatetime endDatetime viewPublic';
+  const _userListProjection = 'name:1';
 
   // GET API root
   app.get('/api/', (req, res) => {
@@ -113,6 +114,21 @@ module.exports = function(app, config) {
         });
       }
       res.send(rsvpsArr);
+    });
+  });
+  // GET ALL Usesr by rsvps name
+  app.get('/api/rsvps', jwtCheck, (req, res) => {
+    Rsvp.find({},(err, rsvps) => {
+      let usersArr = [];
+      if (err) {
+        return res.status(500).send({message: err.message});
+      }
+      if (rsvps) {
+        rsvps.forEach(rsvp => {
+          usersArr.push(rsvp);
+        });
+      }
+     res.send(usersArr);
     });
   });
 
