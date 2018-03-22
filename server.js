@@ -20,7 +20,7 @@ const config = require('./server/config');
  |--------------------------------------
  */
 
-mongoose.connect(config.MONGO_URI, { useMongoClient: true });
+mongoose.connect(config.MONGO_URI);
 const monDb = mongoose.connection;
 
 monDb.on('error', function() {
