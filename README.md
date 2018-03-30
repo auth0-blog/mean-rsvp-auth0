@@ -15,10 +15,35 @@ Clone this repository, then run:
 $ npm install
 ```
 
-## Setup
+## Setup Configuration for Node and Angular
+* Add your Auth0 credentials<br>
+**Angular** ->  <br>
+`src/app/auth/auth.config.ts`<br>
+**Node** -><br>
+remove `.SAMPLE`: <br>
+`server/config.js.SAMPLE`<br>
+`/server/config.js'
 
-* Add your Auth0 credentials and remove `.SAMPLE`: `server/config.js.SAMPLE`
-* Add your Auth0 credentials: `src/app/auth/auth.config.ts`
+
+
+## Setup Adminstrator
+* In order to add events a user will need to gain administrator access. 
+* To add administrator access to a user you will need to set up **2 seperate** Auth0 rules. To set up Auth0 rules please refer to the excellent blog post available at 'https://auth0.com/blog/real-world-angular-series-part-2/#admin-authorization' 
+* Take special notice that in your current configuration files listed above that **Namespace**:
+is set to:
+```
+NAMESPACE: 'http://myapp.com/roles' 
+```
+you need to update the  rules implementation's **context.idToken** in the (Auth0 dashboard)['https://manage.auth0.com/#/rules/'] to use that **Namespace** in the configuration files. The inital rule may use a different default such as below:
+```
+context.idToken['https://example.com/roles'] = user.app_metadata.roles;
+```
+would need to be the same as your **Namespace** 
+```
+context.idToken['http://myapp.com/roles'] = user.app_metadata.roles;
+```
+
+
 
 ## Development server
 
