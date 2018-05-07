@@ -6,8 +6,8 @@
     </h1>
     <div class="header-page-authStatus">
       <a *ngIf="!auth.loggedIn" (click)="auth.login()">Log In</a>
-      <span *ngIf="auth.loggedIn">
-        <a routerLink="/my-rsvps">{{auth.userProfile?.name}}</a>
+      <span *ngIf="auth.loggedIn && auth.userProfile">
+        <a routerLink="/my-rsvps">{{auth.userProfile.name}}</a>
         <span class="divider">|</span>
         <a (click)="auth.logout()">Log Out</a>
       </span>

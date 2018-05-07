@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, fromEvent } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AuthService } from './auth/auth.service';
 

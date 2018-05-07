@@ -1,12 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehaviorSubject, Subscription, Observable, of, timer } from 'rxjs';
+import { BehaviorSubject, Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AUTH_CONFIG } from './auth.config';
 import * as auth0 from 'auth0-js';
 import { ENV } from './../core/env.config';
-
-(window as any).global = window;
 
 @Injectable()
 export class AuthService {
@@ -19,6 +17,7 @@ export class AuthService {
     audience: AUTH_CONFIG.AUDIENCE,
     scope: AUTH_CONFIG.SCOPE
   });
+  accessToken: string;
   userProfile: any;
   isAdmin: boolean;
   // Create a stream of logged in status to communicate throughout app
@@ -28,24 +27,17 @@ export class AuthService {
   refreshSub: Subscription;
 
   constructor(private router: Router) {
-    // If authenticated, set local profile property,
-    // admin status, update login status, schedule renewal.
-    // If not authenticated but there are still items
-    // in localStorage, log out.
-    const lsProfile = localStorage.getItem('profile');
-
+    // If expiration isn't elapsed, acquire new token
+    // Otherwise, clear any auth data
     if (this.tokenValid) {
-      this.userProfile = JSON.parse(lsProfile);
-      this.isAdmin = localStorage.getItem('isAdmin') === 'true';
-      this.setLoggedIn(true);
-      this.scheduleRenewal();
-    } else if (!this.tokenValid && lsProfile) {
+      this.getToken();
+    } else {
       this.logout();
     }
   }
 
   setLoggedIn(value: boolean) {
-    // Update login status subject
+    // Update login status behavior subject
     this.loggedIn$.next(value);
     this.loggedIn = value;
   }
@@ -60,7 +52,7 @@ export class AuthService {
 
   handleAuth() {
     // When Auth0 hash parsed, get profile
-    this._auth0.parseHash((err, authResult) => {
+    this._auth0.parseHash(window.location.href, (err, authResult) => {
       if (authResult && authResult.accessToken) {
         window.location.hash = '';
         this._getProfile(authResult);
@@ -88,14 +80,12 @@ export class AuthService {
   private _setSession(authResult, profile?) {
     // Set tokens and expiration in localStorage
     const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + Date.now());
-    localStorage.setItem('access_token', authResult.accessToken);
+    this.accessToken = authResult.accessToken;
     localStorage.setItem('expires_at', expiresAt);
     // If initial login, set profile and admin information
     if (profile) {
-      localStorage.setItem('profile', JSON.stringify(profile));
       this.userProfile = profile;
       this.isAdmin = this._checkAdmin(profile);
-      localStorage.setItem('isAdmin', this.isAdmin.toString());
     }
     // Update login status in loggedIn$ stream
     this.setLoggedIn(true);
@@ -130,13 +120,9 @@ export class AuthService {
   }
 
   logout(noRedirect?: boolean) {
-    // Ensure all auth items removed from localStorage
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('profile');
-    localStorage.removeItem('isAdmin');
     localStorage.removeItem('expires_at');
     this._clearRedirect();
-    // Reset local properties, update loggedIn$ stream
+    this.accessToken = undefined;
     this.userProfile = undefined;
     this.isAdmin = undefined;
     this.setLoggedIn(false);
@@ -154,20 +140,18 @@ export class AuthService {
     return Date.now() < expiresAt;
   }
 
-  renewToken() {
-    this._auth0.checkSession({},
-      (err, authResult) => {
-        if (authResult && authResult.accessToken) {
-          this._setSession(authResult);
-        } else if (err) {
-          console.warn(`Could not renew token: ${err.errorDescription}`);
-          // Log out without redirecting to clear auth data
-          this.logout(true);
-          // Log in again
-          this.login();
-        }
+  getToken() {
+    this._auth0.checkSession({}, (err, authResult) => {
+      if (authResult && authResult.accessToken) {
+        this._getProfile(authResult);
+      } else if (err) {
+        console.warn(`Could not retrieve access token: ${err.errorDescription}`);
+        // Log out without redirecting to clear auth data
+        this.logout(true);
+        // Prompt user to log in again
+        this.login();
       }
-    );
+    });
   }
 
   scheduleRenewal() {
@@ -191,7 +175,7 @@ export class AuthService {
     this.refreshSub = expiresIn$
       .subscribe(
         () => {
-          this.renewToken();
+          this.getToken();
           this.scheduleRenewal();
         }
       );

@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { AuthService } from './../auth/auth.service';
-import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -15,7 +14,8 @@ export class HeaderComponent implements OnInit {
 
   constructor(
     private router: Router,
-    public auth: AuthService) { }
+    public auth: AuthService
+  ) { }
 
   ngOnInit() {
     // If nav is open after routing, close it
