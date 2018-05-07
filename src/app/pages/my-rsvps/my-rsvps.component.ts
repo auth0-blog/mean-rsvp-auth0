@@ -31,9 +31,9 @@ export class MyRsvpsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loggedInSub = this.auth.loggedIn$.subscribe(
-      res => {
-        if (res) {
-          this.userIdp = this._getIdp;
+      loggedIn => {
+        this.loading = true;
+        if (loggedIn) {
           this._getEventList();
         }
       }
@@ -42,7 +42,6 @@ export class MyRsvpsComponent implements OnInit, OnDestroy {
   }
 
   private _getEventList() {
-    this.loading = true;
     // Get events user has RSVPed to
     this.eventListSub = this.api
       .getUserEvents$(this.auth.userProfile.sub)
