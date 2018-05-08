@@ -23,6 +23,7 @@ export class AuthService {
   // Create a stream of logged in status to communicate throughout app
   loggedIn: boolean;
   loggedIn$ = new BehaviorSubject<boolean>(this.loggedIn);
+  loggingIn: boolean;
   // Subscribe to token expiration stream
   refreshSub: Subscription;
 
@@ -57,12 +58,12 @@ export class AuthService {
   }
 
   private _getProfile(authResult) {
+    this.loggingIn = true;
     // Use access token to retrieve user's profile and set session
     this._auth0.client.userInfo(authResult.accessToken, (err, profile) => {
       if (profile) {
         this._setSession(authResult, profile);
         this._redirect();
-        this._clearRedirect();
       } else if (err) {
         console.warn(`Error retrieving profile: ${err.error}`);
       }
@@ -81,6 +82,7 @@ export class AuthService {
     }
     // Update login status in loggedIn$ stream
     this.setLoggedIn(true);
+    this.loggingIn = false;
     // Schedule access token renewal
     this.scheduleRenewal();
   }
@@ -99,13 +101,13 @@ export class AuthService {
     const navArr = [redirectArr[0] || '/'];
     const tabObj = redirectArr[1] ? { queryParams: { tab: redirectArr[1] }} : null;
 
-    console.log(fullRedirect, redirectArr);
-
     if (!tabObj) {
       this.router.navigate(navArr);
     } else {
       this.router.navigate(navArr, tabObj);
     }
+    // Redirection completed; clear redirect from storage
+    this._clearRedirect();
   }
 
   private _clearRedirect() {
