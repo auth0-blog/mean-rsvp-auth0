@@ -28,9 +28,9 @@ export class AuthService {
   refreshSub: Subscription;
 
   constructor(private router: Router) {
-    // Get token, if not logged out
+    // Request new token if session is unexpired
     if (this.tokenValid) {
-      this.getToken();
+      this.renewToken();
     }
   }
 
@@ -138,16 +138,13 @@ export class AuthService {
     return Date.now() < expiresAt;
   }
 
-  getToken() {
+  renewToken() {
     // Check for valid Auth0 session
     this._auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken) {
         this._getProfile(authResult);
-      } else {
-        console.warn('Could not retrieve access token');
-        if (err) {
-          console.warn(err);
-        }
+      } else if (err) {
+        console.warn('Could not retrieve access token', err);
         // Log out without redirecting to clear auth data
         this.logout(true);
         // Prompt user to log in again
@@ -157,7 +154,7 @@ export class AuthService {
   }
 
   scheduleRenewal() {
-    // If user isn't authenticated, do nothing
+    // If last token is expired, do nothing
     if (!this.tokenValid) { return; }
     // Unsubscribe from previous expiration observable
     this.unscheduleRenewal();
@@ -177,7 +174,7 @@ export class AuthService {
     this.refreshSub = expiresIn$
       .subscribe(
         () => {
-          this.getToken();
+          this.renewToken();
           this.scheduleRenewal();
         }
       );
