@@ -11,10 +11,9 @@
   </li>
 </ul>
 
-<p
-  *ngIf="event.description"
-  class="card-body lead px-3 pt-2 pb-0"
-  [innerHTML]="event.description"></p>
+<div class="card-body" *ngIf="event.description">
+  <p class="card-text lead" [innerHTML]="event.description"></p>
+</div>
 
 <div *ngIf="auth.isAdmin" class="card-footer text-right small">
   <a [routerLink]="['/admin/event/update', event._id]">Edit</a>

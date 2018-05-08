@@ -1,19 +1,21 @@
-<div class="card-body">
+<div class="card-body pb-0">
   <h2 class="card-title text-center mb-0">RSVP</h2>
   <app-loading *ngIf="loading"></app-loading>
 </div>
 
 <!-- Event is over -->
-<p *ngIf="eventPast" class="card-body lead pt-0 pb-1">
-  You cannot RSVP to an event that has already ended.
-</p>
+<div *ngIf="eventPast" class="card-body">
+  <p class="lead card-text">You cannot RSVP to an event that has already ended.</p>
+</div>
 
 <ng-template [ngIf]="utils.isLoaded(loading)">
   <ng-template [ngIf]="!eventPast && rsvps">
 
     <!-- User has RSVPed -->
     <ng-template [ngIf]="userRsvp">
-      <p class="card-body lead pt-0 pb-1">You responded to this event with the following information:</p>
+      <div class="card-body">
+        <p class="lead card-text">You responded to this event with the following information:</p>
+      </div>
 
       <ul *ngIf="!showEditForm" class="list-group list-group-flush">
         <li class="list-group-item">
@@ -46,7 +48,7 @@
 
     <!-- No RSVP yet -->
     <div *ngIf="!userRsvp" class="card-body">
-      <p class="lead">Fill out the form below to respond:</p>
+      <p class="lead card-text">Fill out the form below to respond:</p>
 
       <app-rsvp-form
         [eventId]="eventId"
@@ -62,7 +64,7 @@
   <section class="allRsvps" *ngIf="showAllRsvps" [@expandCollapse]>
     <div class="card-body">
       <h3 class="card-title text-center">All RSVPs</h3>
-      <p *ngIf="!rsvps.length" class="lead">There are currently no RSVPs for this event.</p>
+      <p *ngIf="!rsvps.length" class="lead card-text">There are currently no RSVPs for this event.</p>
     </div>
 
     <ul *ngIf="rsvps.length" class="list-group list-group-flush">
