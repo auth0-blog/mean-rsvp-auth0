@@ -4,7 +4,6 @@
 /src/app/auth/auth.config.ts
 
 # compiled output
-/dist
 /tmp
 /out-tsc
 
