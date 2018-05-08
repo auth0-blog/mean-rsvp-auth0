@@ -1,10 +1,10 @@
-<div class="card-block">
-  <h2 class="card-title text-center">RSVP</h2>
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">RSVP</h2>
   <app-loading *ngIf="loading"></app-loading>
 </div>
 
 <!-- Event is over -->
-<p *ngIf="eventPast" class="card-block lead">
+<p *ngIf="eventPast" class="card-body lead pt-0 pb-1">
   You cannot RSVP to an event that has already ended.
 </p>
 
@@ -13,7 +13,7 @@
 
     <!-- User has RSVPed -->
     <ng-template [ngIf]="userRsvp">
-      <p class="card-block lead">You responded to this event with the following information:</p>
+      <p class="card-body lead pt-0 pb-1">You responded to this event with the following information:</p>
 
       <ul *ngIf="!showEditForm" class="list-group list-group-flush">
         <li class="list-group-item">
@@ -30,7 +30,7 @@
         </li>
       </ul>
 
-      <div class="card-block">
+      <div class="card-body">
         <button
           class="btn btn-info"
           [ngClass]="{'btn-info': !showEditForm, 'btn-warning': showEditForm}"
@@ -45,7 +45,7 @@
     </ng-template>
 
     <!-- No RSVP yet -->
-    <div *ngIf="!userRsvp" class="card-block">
+    <div *ngIf="!userRsvp" class="card-body">
       <p class="lead">Fill out the form below to respond:</p>
 
       <app-rsvp-form
@@ -55,12 +55,12 @@
   </ng-template>
 
   <!-- All RSVPs -->
-  <div class="card-block text-right">
+  <div class="card-body text-right">
     <button (click)="toggleShowRsvps()" class="btn btn-link btn-sm">{{showRsvpsText}}</button>
   </div>
 
   <section class="allRsvps" *ngIf="showAllRsvps" [@expandCollapse]>
-    <div class="card-block">
+    <div class="card-body">
       <h3 class="card-title text-center">All RSVPs</h3>
       <p *ngIf="!rsvps.length" class="lead">There are currently no RSVPs for this event.</p>
     </div>
@@ -94,7 +94,7 @@
   </section>
 
   <!-- Error loading RSVPs -->
-  <div *ngIf="error" class="card-block">
+  <div *ngIf="error" class="card-body">
     <p class="alert alert-danger">
       <strong>Oops!</strong> There was an error retrieving RSVPs for this event.
     </p>

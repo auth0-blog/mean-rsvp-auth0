@@ -1,5 +1,5 @@
-<div class="card-block">
-  <h2 class="card-title text-center">Event Details</h2>
+<div class="card-body">
+  <h2 class="card-title text-center mb-0">Event Details</h2>
 </div>
 
 <ul class="list-group list-group-flush">
@@ -13,7 +13,7 @@
 
 <p
   *ngIf="event.description"
-  class="card-block lead"
+  class="card-body lead px-3 pt-2 pb-0"
   [innerHTML]="event.description"></p>
 
 <div *ngIf="auth.isAdmin" class="card-footer text-right small">
