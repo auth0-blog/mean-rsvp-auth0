@@ -1,6 +1,6 @@
 <h1 class="text-center">{{pageTitle}}</h1>
-<p class="lead" *ngIf="auth.loggedIn">
-  Hello, <strong [innerHTML]="auth.userProfile.name"></strong>! You logged in with {{userIdp}}.
+<p class="lead" *ngIf="auth.loggedIn && auth.userProfile">
+  Hello, <strong [innerHTML]="auth.userProfile.name"></strong>!
   <ng-template [ngIf]="auth.isAdmin">
     You may <a routerLink="/admin">create and administer events</a>.
   </ng-template>

@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { ApiService } from './../../core/api.service';
 import { UtilsService } from './../../core/utils.service';
 import { FilterSortService } from './../../core/filter-sort.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { EventModel } from './../../core/models/event.model';
 
 @Component({

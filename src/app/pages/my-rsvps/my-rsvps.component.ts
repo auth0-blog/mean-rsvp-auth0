@@ -4,7 +4,7 @@ import { AuthService } from './../../auth/auth.service';
 import { ApiService } from './../../core/api.service';
 import { UtilsService } from './../../core/utils.service';
 import { FilterSortService } from './../../core/filter-sort.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { EventModel } from './../../core/models/event.model';
 
 @Component({
@@ -14,6 +14,7 @@ import { EventModel } from './../../core/models/event.model';
 })
 export class MyRsvpsComponent implements OnInit, OnDestroy {
   pageTitle = 'My RSVPs';
+  loggedInSub: Subscription;
   eventListSub: Subscription;
   eventList: EventModel[];
   loading: boolean;
@@ -25,16 +26,22 @@ export class MyRsvpsComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     private api: ApiService,
     public fs: FilterSortService,
-    public utils: UtilsService) { }
+    public utils: UtilsService
+  ) { }
 
   ngOnInit() {
+    this.loggedInSub = this.auth.loggedIn$.subscribe(
+      loggedIn => {
+        this.loading = true;
+        if (loggedIn) {
+          this._getEventList();
+        }
+      }
+    );
     this.title.setTitle(this.pageTitle);
-    this.userIdp = this._getIdp;
-    this._getEventList();
   }
 
   private _getEventList() {
-    this.loading = true;
     // Get events user has RSVPed to
     this.eventListSub = this.api
       .getUserEvents$(this.auth.userProfile.sub)
@@ -66,6 +73,7 @@ export class MyRsvpsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.loggedInSub.unsubscribe();
     this.eventListSub.unsubscribe();
   }
 

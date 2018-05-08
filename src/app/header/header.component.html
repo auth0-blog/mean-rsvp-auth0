@@ -5,12 +5,15 @@
       <a routerLink="/">RSVP</a>
     </h1>
     <div class="header-page-authStatus">
-      <a *ngIf="!auth.loggedIn" (click)="auth.login()">Log In</a>
-      <span *ngIf="auth.loggedIn">
-        <a routerLink="/my-rsvps">{{auth.userProfile?.name}}</a>
-        <span class="opacity-half">|</span>
-        <a (click)="auth.logout()">Log Out</a>
-      </span>
+      <span *ngIf="auth.loggingIn">Logging in...</span>
+      <ng-template [ngIf]="!auth.loggingIn">
+        <a *ngIf="!auth.loggedIn" (click)="auth.login()">Log In</a>
+        <span *ngIf="auth.loggedIn && auth.userProfile">
+          <a routerLink="/my-rsvps">{{auth.userProfile.name}}</a>
+          <span class="divider">|</span>
+          <a (click)="auth.logout()">Log Out</a>
+        </span>
+      </ng-template>
     </div>
   </div>
 

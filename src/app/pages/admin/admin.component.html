@@ -14,21 +14,24 @@
   <ng-template [ngIf]="eventList">
     <ng-template [ngIf]="eventList.length">
       <!-- Search events -->
-      <section class="search input-group mb-3">
-        <label class="input-group-addon" for="search">Search</label>
+      <label class="sr-only" for="search">Search</label>
+      <div class="search input-group mb-3">
+        <div class="input-group-prepend">
+          <div class="input-group-text">Search</div>
+        </div>
         <input
           id="search"
           type="text"
           class="form-control"
           [(ngModel)]="query"
           (keyup)="searchEvents()" />
-        <span class="input-group-btn">
+        <span class="input-group-append">
           <button
             class="btn btn-danger"
             (click)="resetQuery()"
             [disabled]="!query">&times;</button>
         </span>
-      </section>
+      </div>
 
       <!-- No search results -->
       <p *ngIf="fs.noSearchResults(filteredEvents, query)" class="alert alert-warning">
@@ -62,7 +65,7 @@
           </p>
           <p class="mb-1">
             <a
-              class="btn btn-info btn-sm"
+              class="btn btn-info btn-sm mr-1"
               [routerLink]="['/admin/event/update', event._id]">Edit</a>
             <a
               class="btn btn-danger btn-sm"

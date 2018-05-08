@@ -1,6 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 /server/config.js
+/src/app/auth/auth.config.ts
 
 # compiled output
 /dist

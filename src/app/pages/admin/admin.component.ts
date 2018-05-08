@@ -4,7 +4,7 @@ import { AuthService } from './../../auth/auth.service';
 import { ApiService } from './../../core/api.service';
 import { UtilsService } from './../../core/utils.service';
 import { FilterSortService } from './../../core/filter-sort.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { EventModel } from './../../core/models/event.model';
 
 @Component({
@@ -14,6 +14,7 @@ import { EventModel } from './../../core/models/event.model';
 })
 export class AdminComponent implements OnInit, OnDestroy {
   pageTitle = 'Admin';
+  loggedInSub: Subscription;
   eventsSub: Subscription;
   eventList: EventModel[];
   filteredEvents: EventModel[];
@@ -26,7 +27,8 @@ export class AdminComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     private api: ApiService,
     public utils: UtilsService,
-    public fs: FilterSortService) { }
+    public fs: FilterSortService
+  ) { }
 
   ngOnInit() {
     this.title.setTitle(this.pageTitle);
@@ -34,7 +36,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   private _getEventList() {
-    this.loading = true;
     // Get all (admin) events
     this.eventsSub = this.api
       .getAdminEvents$()
