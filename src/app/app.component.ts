@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { AuthService } from './auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +12,7 @@ export class AppComponent implements OnInit {
   minHeight: string;
   private _initWinHeight = 0;
 
-  constructor(private auth: AuthService) {
-    // Check for authentication and handle if hash present
-    auth.handleAuth();
-  }
+  constructor() { }
 
   ngOnInit() {
     fromEvent(window, 'resize')

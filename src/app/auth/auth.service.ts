@@ -27,13 +27,8 @@ export class AuthService {
   refreshSub: Subscription;
 
   constructor(private router: Router) {
-    // If expiration isn't elapsed, acquire new token
-    // Otherwise, clear any auth data
-    if (this.tokenValid) {
-      this.getToken();
-    } else {
-      this.logout();
-    }
+    // Get token, if possible
+    this.getToken();
   }
 
   setLoggedIn(value: boolean) {
@@ -42,10 +37,7 @@ export class AuthService {
     this.loggedIn = value;
   }
 
-  login(redirect?: string) {
-    // Set redirect after login
-    const _redirect = redirect ? redirect : this.router.url;
-    localStorage.setItem('authRedirect', _redirect);
+  login() {
     // Auth0 authorize request
     this._auth0.authorize();
   }
@@ -107,6 +99,8 @@ export class AuthService {
     const navArr = [redirectArr[0] || '/'];
     const tabObj = redirectArr[1] ? { queryParams: { tab: redirectArr[1] }} : null;
 
+    console.log(fullRedirect, redirectArr);
+
     if (!tabObj) {
       this.router.navigate(navArr);
     } else {
@@ -141,11 +135,15 @@ export class AuthService {
   }
 
   getToken() {
+    // Check for valid Auth0 session
     this._auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken) {
         this._getProfile(authResult);
-      } else if (err) {
-        console.warn(`Could not retrieve access token: ${err.errorDescription}`);
+      } else {
+        console.warn('Could not retrieve access token');
+        if (err) {
+          console.warn(err);
+        }
         // Log out without redirecting to clear auth data
         this.logout(true);
         // Prompt user to log in again
