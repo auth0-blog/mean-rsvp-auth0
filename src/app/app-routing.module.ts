@@ -3,6 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 // Route guards
 import { AuthGuard } from './auth/auth.guard';
 import { AdminGuard } from './auth/admin.guard';
+// Route resolve
+import { AuthResolve } from './auth/auth.resolve';
 // Page components
 import { HomeComponent } from './pages/home/home.component';
 import { CallbackComponent } from './pages/callback/callback.component';
@@ -22,14 +24,20 @@ const routes: Routes = [
     loadChildren: './pages/event/event.module#EventModule',
     canActivate: [
       AuthGuard
-    ]
+    ],
+    resolve: {
+      authenticated: AuthResolve
+    }
   },
   {
     path: 'my-rsvps',
     component: MyRsvpsComponent,
     canActivate: [
       AuthGuard
-    ]
+    ],
+    resolve: {
+      authenticated: AuthResolve
+    }
   },
   {
     path: 'admin',
@@ -37,7 +45,10 @@ const routes: Routes = [
     canActivate: [
       AuthGuard,
       AdminGuard
-    ]
+    ],
+    resolve: {
+      authenticated: AuthResolve
+    }
   },
   {
     path: '**',
@@ -50,7 +61,8 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   providers: [
     AuthGuard,
-    AdminGuard
+    AdminGuard,
+    AuthResolve
   ],
   exports: [RouterModule]
 })
