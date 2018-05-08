@@ -28,8 +28,10 @@ export class AuthService {
   refreshSub: Subscription;
 
   constructor(private router: Router) {
-    // Get token, if possible
-    this.getToken();
+    // Get token, if not logged out
+    if (this.tokenValid) {
+      this.getToken();
+    }
   }
 
   setLoggedIn(value: boolean) {
