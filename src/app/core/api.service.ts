@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from './../auth/auth.service';
-import { throwError, Observable } from 'rxjs';
+import { throwError as ObservableThrowError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ENV } from './env.config';
 import { EventModel } from './models/event.model';
@@ -131,7 +131,7 @@ export class ApiService {
     if (err.message && err.message.indexOf('No JWT present') > -1) {
       this.auth.login();
     }
-    return throwError(errorMsg);
+    return ObservableThrowError(errorMsg);
   }
 
 }
