@@ -13,6 +13,7 @@ export class EventDetailComponent {
 
   constructor(
     public utils: UtilsService,
-    public auth: AuthService) { }
+    public auth: AuthService
+  ) { }
 
 }

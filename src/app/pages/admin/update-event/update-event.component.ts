@@ -29,7 +29,8 @@ export class UpdateEventComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     private api: ApiService,
     public utils: UtilsService,
-    private title: Title) { }
+    private title: Title
+  ) { }
 
   ngOnInit() {
     this.title.setTitle(this.pageTitle);

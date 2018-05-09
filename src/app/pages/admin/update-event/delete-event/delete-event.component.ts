@@ -18,7 +18,8 @@ export class DeleteEventComponent implements OnDestroy {
 
   constructor(
     private api: ApiService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   removeEvent() {
     this.submitting = true;

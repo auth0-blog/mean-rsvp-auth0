@@ -32,7 +32,8 @@ export class RsvpComponent implements OnInit, OnDestroy {
     public auth: AuthService,
     private api: ApiService,
     public utils: UtilsService,
-    public fs: FilterSortService) { }
+    public fs: FilterSortService
+  ) { }
 
   ngOnInit() {
     this.footerTense = !this.eventPast ? 'plan to attend this event.' : 'attended this event.';

@@ -24,7 +24,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private title: Title,
     public utils: UtilsService,
     private api: ApiService,
-    public fs: FilterSortService) { }
+    public fs: FilterSortService
+  ) { }
 
   ngOnInit() {
     this.title.setTitle(this.pageTitle);

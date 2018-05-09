@@ -23,7 +23,8 @@ export class RsvpFormComponent implements OnInit, OnDestroy {
 
   constructor(
     private auth: AuthService,
-    private api: ApiService) { }
+    private api: ApiService
+  ) { }
 
   ngOnInit() {
     this.isEdit = !!this.rsvp;

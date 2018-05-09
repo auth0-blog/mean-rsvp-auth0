@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { AuthService } from './../auth/auth.service';
 import { throwError, Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { ENV } from './env.config';
 import { EventModel } from './models/event.model';
 import { RsvpModel } from './models/rsvp.model';
@@ -12,7 +11,8 @@ import { RsvpModel } from './models/rsvp.model';
 export class ApiService {
   constructor(
     private http: HttpClient,
-    private auth: AuthService) { }
+    private auth: AuthService
+  ) { }
 
   private get _authHeader(): string {
     return `Bearer ${this.auth.accessToken}`;
