@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AUTH_CONFIG } from './auth.config';
@@ -19,6 +19,7 @@ export class AuthService {
   });
   accessToken: string;
   userProfile: any;
+  expiresAt: number;
   isAdmin: boolean;
   // Create a stream of logged in status to communicate throughout app
   loggedIn: boolean;
@@ -26,12 +27,15 @@ export class AuthService {
   loggingIn: boolean;
   // Subscribe to token expiration stream
   refreshSub: Subscription;
+  routeSub: Subscription;
 
-  constructor(private router: Router) {
-    // Request new token if session is unexpired
-    if (this.tokenValid) {
-      this.renewToken();
-    }
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.routeSub = route.url.subscribe(url => {
+      if (url[0].path.indexOf('callback') < 0) {
+        this.renewToken();
+      }
+      // this.routeSub.unsubscribe();
+    });
   }
 
   setLoggedIn(value: boolean) {
@@ -74,9 +78,10 @@ export class AuthService {
 
   private _setSession(authResult, profile?) {
     // Set tokens and expiration in localStorage
-    const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + Date.now());
+    this.expiresAt = (authResult.expiresIn * 1000) + Date.now();
+    // Store expiration in local storage to access in constructor
+    localStorage.setItem('expires_at', JSON.stringify(this.expiresAt));
     this.accessToken = authResult.accessToken;
-    localStorage.setItem('expires_at', expiresAt);
     // If initial login, set profile and admin information
     if (profile) {
       this.userProfile = profile;
@@ -117,25 +122,19 @@ export class AuthService {
     localStorage.removeItem('authRedirect');
   }
 
-  logout(noRedirect?: boolean) {
-    localStorage.removeItem('expires_at');
+  logout() {
+    // Remove redirect info from localStorage
     this._clearRedirect();
-    this.accessToken = undefined;
-    this.userProfile = undefined;
-    this.isAdmin = undefined;
-    this.setLoggedIn(false);
-    // Unschedule access token renewal
-    this.unscheduleRenewal();
-    // Return to homepage
-    if (noRedirect !== true) {
-      this.router.navigate(['/']);
-    }
+    // End Auth0 authentication session
+    this._auth0.logout({
+      clientId: AUTH_CONFIG.CLIENT_ID,
+      returnTo: ENV.BASE_URI
+    });
   }
 
   get tokenValid(): boolean {
     // Check if current time is past access token's expiration
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    return Date.now() < expiresAt;
+    return Date.now() < this.expiresAt;
   }
 
   renewToken() {
@@ -143,12 +142,6 @@ export class AuthService {
     this._auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken) {
         this._getProfile(authResult);
-      } else if (err) {
-        console.warn('Could not retrieve access token', err);
-        // Log out without redirecting to clear auth data
-        this.logout(true);
-        // Prompt user to log in again
-        this.login();
       }
     });
   }
@@ -159,8 +152,7 @@ export class AuthService {
     // Unsubscribe from previous expiration observable
     this.unscheduleRenewal();
     // Create and subscribe to expiration observable
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-    const expiresIn$ = of(expiresAt).pipe(
+    const expiresIn$ = of(this.expiresAt).pipe(
       mergeMap(
         expires => {
           const now = Date.now();
