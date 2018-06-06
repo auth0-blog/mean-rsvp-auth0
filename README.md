@@ -23,11 +23,12 @@ $ npm install
 ## Development server
 
 ```bash
-$ ng serve // client
-$ NODE_ENV=dev nodemon server // server
+$ npm run dev
 ```
 
-Available at `http://localhost:4200`. 
+App available at `http://localhost:4200`.
+
+Server available at `http://localhost:8083/api`.
 
 ## Build (local)
 
