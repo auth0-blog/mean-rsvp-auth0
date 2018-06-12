@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Subscription, of, timer } from 'rxjs';
 import { mergeMap } from 'rxjs/operators';
 import { AUTH_CONFIG } from './auth.config';
@@ -29,13 +29,11 @@ export class AuthService {
   refreshSub: Subscription;
   routeSub: Subscription;
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.routeSub = route.url.subscribe(url => {
-      if (url[0].path.indexOf('callback') < 0) {
-        this.renewToken();
-      }
-      // this.routeSub.unsubscribe();
-    });
+  constructor(private router: Router) {
+    // If app auth session is not expired, request new token
+    if (JSON.parse(localStorage.getItem('expires_at')) > Date.now()) {
+      this.renewToken();
+    }
   }
 
   setLoggedIn(value: boolean) {
@@ -122,8 +120,14 @@ export class AuthService {
     localStorage.removeItem('authRedirect');
   }
 
+  private _clearExpiration() {
+    // Remove token expiration from localStorage
+    localStorage.removeItem('expires_at');
+  }
+
   logout() {
-    // Remove redirect info from localStorage
+    // Remove data from localStorage
+    this._clearExpiration();
     this._clearRedirect();
     // End Auth0 authentication session
     this._auth0.logout({
@@ -134,7 +138,7 @@ export class AuthService {
 
   get tokenValid(): boolean {
     // Check if current time is past access token's expiration
-    return Date.now() < this.expiresAt;
+    return Date.now() < JSON.parse(localStorage.getItem('expires_at'));
   }
 
   renewToken() {
@@ -142,6 +146,8 @@ export class AuthService {
     this._auth0.checkSession({}, (err, authResult) => {
       if (authResult && authResult.accessToken) {
         this._getProfile(authResult);
+      } else {
+        this._clearExpiration();
       }
     });
   }

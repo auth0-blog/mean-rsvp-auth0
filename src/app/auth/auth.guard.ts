@@ -10,12 +10,12 @@ export class AuthGuard implements CanActivate {
 
   canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state: RouterStateSnapshot
+  ): Observable<boolean> | Promise<boolean> | boolean {
     if (!this.auth.loggedIn) {
-      // Not logged in yet: set auth redirect
       localStorage.setItem('authRedirect', state.url);
     }
-    if (this.auth.tokenValid) {
+    if (this.auth.tokenValid && this.auth.loggedIn) {
       return true;
     } else {
       this.auth.login();
