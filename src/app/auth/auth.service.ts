@@ -30,7 +30,7 @@ export class AuthService {
   routeSub: Subscription;
 
   constructor(private router: Router) {
-    // If app auth session is not expired, request new token
+    // If app auth token is not expired, request new token
     if (JSON.parse(localStorage.getItem('expires_at')) > Date.now()) {
       this.renewToken();
     }
@@ -75,7 +75,6 @@ export class AuthService {
   }
 
   private _setSession(authResult, profile?) {
-    // Set tokens and expiration in localStorage
     this.expiresAt = (authResult.expiresIn * 1000) + Date.now();
     // Store expiration in local storage to access in constructor
     localStorage.setItem('expires_at', JSON.stringify(this.expiresAt));
