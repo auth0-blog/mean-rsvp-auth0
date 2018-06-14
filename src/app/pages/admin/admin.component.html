@@ -1,8 +1,8 @@
-<h1 class="text-center">{{pageTitle}}</h1>
+<h1 class="text-center">{{ pageTitle }}</h1>
 <app-loading *ngIf="loading"></app-loading>
 
 <ng-template [ngIf]="utils.isLoaded(loading)">
-  <p class="lead">Welcome, {{auth.userProfile?.name}}! You can create and administer events below.</p>
+  <p class="lead">Welcome, {{ auth.userProfile?.name }}! You can create and administer events below.</p>
 
   <p>
     <a
@@ -35,7 +35,7 @@
 
       <!-- No search results -->
       <p *ngIf="fs.noSearchResults(filteredEvents, query)" class="alert alert-warning">
-        No events found for <em class="text-danger">{{query}}</em>, sorry!
+        No events found for <em class="text-danger">{{ query }}</em>, sorry!
       </p>
 
       <!-- Events listing -->
@@ -61,7 +61,7 @@
             </div>
           </div>
           <p class="mb-1">
-            <strong>Date:</strong> {{utils.eventDates(event.startDatetime, event.endDatetime)}}
+            <strong>Date:</strong> {{ utils.eventDates(event.startDatetime, event.endDatetime) }}
           </p>
           <p class="mb-1">
             <a

@@ -8,7 +8,8 @@ export class AdminGuard implements CanActivate {
 
   constructor(
     private auth: AuthService,
-    private router: Router) { }
+    private router: Router
+  ) { }
 
   canActivate(): Observable<boolean> | Promise<boolean> | boolean {
     if (this.auth.isAdmin) {
