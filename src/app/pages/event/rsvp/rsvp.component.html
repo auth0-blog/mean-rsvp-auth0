@@ -34,7 +34,7 @@
       <div class="card-body">
         <button
           class="btn btn-info"
-          [ngClass]="{'btn-info': !showEditForm, 'btn-warning': showEditForm}"
+          [ngClass]="{ 'btn-info': !showEditForm, 'btn-warning': showEditForm }"
           (click)="toggleEditForm()">{{ editBtnText }}</button>
 
         <app-rsvp-form
