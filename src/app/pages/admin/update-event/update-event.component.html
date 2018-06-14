@@ -1,4 +1,4 @@
-<h1 class="text-center">{{pageTitle}}</h1>
+<h1 class="text-center">{{ pageTitle }}</h1>
 
 <app-loading *ngIf="loading"></app-loading>
 
@@ -10,15 +10,15 @@
           <a
             class="nav-link"
             [routerLink]="[]"
-            [queryParams]="{tab: 'edit'}"
-            [ngClass]="{'active': utils.tabIs(tab, 'edit')}">Edit</a>
+            [queryParams]="{ tab: 'edit' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'edit') }">Edit</a>
         </li>
         <li class="nav-item">
           <a
             class="nav-link"
             [routerLink]="[]"
-            [queryParams]="{tab: 'delete'}"
-            [ngClass]="{'active': utils.tabIs(tab, 'delete')}">Delete</a>
+            [queryParams]="{ tab: 'delete' }"
+            [ngClass]="{ 'active': utils.tabIs(tab, 'delete') }">Delete</a>
         </li>
       </ul>
     </div>

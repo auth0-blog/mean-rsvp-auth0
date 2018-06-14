@@ -61,7 +61,7 @@ export class EventFormComponent implements OnInit, OnDestroy {
       // If editing existing event, create new
       // FormEventModel from existing data
       // Transform datetimes:
-      // https://angular.io/docs/ts/latest/api/common/index/DatePipe-pipe.html
+      // https://angular.io/api/common/DatePipe
       // _shortDate: 1/7/2017
       // 'shortTime': 12:05 PM
       const _shortDate = 'M/d/yyyy';
