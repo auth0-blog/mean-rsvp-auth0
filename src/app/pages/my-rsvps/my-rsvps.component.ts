@@ -58,20 +58,6 @@ export class MyRsvpsComponent implements OnInit, OnDestroy {
       );
   }
 
-  private get _getIdp(): string {
-    const sub = this.auth.userProfile.sub.split('|')[0];
-    let idp = sub;
-
-    if (sub === 'auth0') {
-      idp = 'Username/Password';
-    } else if (idp === 'google-oauth2') {
-      idp = 'Google';
-    } else {
-      idp = this.utils.capitalize(sub);
-    }
-    return idp;
-  }
-
   ngOnDestroy() {
     this.loggedInSub.unsubscribe();
     this.eventListSub.unsubscribe();

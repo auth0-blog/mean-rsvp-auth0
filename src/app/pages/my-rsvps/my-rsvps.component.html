@@ -1,4 +1,4 @@
-<h1 class="text-center">{{pageTitle}}</h1>
+<h1 class="text-center">{{ pageTitle }}</h1>
 <p class="lead" *ngIf="auth.loggedIn && auth.userProfile">
   Hello, <strong [innerHTML]="auth.userProfile.name"></strong>!
   <ng-template [ngIf]="auth.isAdmin">
@@ -23,11 +23,11 @@
         <a
           *ngFor="let event of fs.orderByDate(eventList, 'startDatetime')"
           [routerLink]="['/event', event._id]"
-          [queryParams]="{tab: 'rsvp'}"
+          [queryParams]="{ tab: 'rsvp' }"
           class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="d-flex w-100 justify-content-between">
             <h5 class="mb-1" [innerHTML]="event.title"></h5>
-            <small>{{utils.eventDates(event.startDatetime, event.endDatetime)}}</small>
+            <small>{{ utils.eventDates(event.startDatetime, event.endDatetime) }}</small>
           </div>
           <small class="mb-1">Click to view or update this RSVP</small>
         </a>
