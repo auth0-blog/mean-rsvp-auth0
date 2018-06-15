@@ -21,7 +21,7 @@ $ npm install
 
 ## Setup
 
-* Add your Auth0 credentials and remove `.SAMPLE` extension: `server/config.js.SAMPLE`
+* Add your Auth0 and MongoDB credentials and remove `.SAMPLE` extension: `server/config.js.SAMPLE`
 * Add your Auth0 credentials and remove `.SAMPLE` extension: `src/app/auth/auth.config.ts.SAMPLE`
 
 ## Development server
@@ -41,7 +41,7 @@ $ ng build --prod // client
 $ node server // server
 ```
 
-Available on `http://localhost:8083`.
+App and server both available on `http://localhost:8083`.
 
 ## Deploy
 
