@@ -4,8 +4,12 @@ This is the sample repository for the Real-World Angular Series of tutorials. Be
 
 ## Requirements
 
-* Node + npm
-* Angular CLI
+* [Node + npm](https://nodejs.org/)
+* [Angular CLI](https://cli.angular.io/) v6+
+* [Auth0 account](https://auth0.com) with [application](https://manage.auth0.com/#/applications)
+* [mLab](https://mlab.com) MongoDB database
+
+This repo is intended to be supplemental to the tutorials. Reference the tutorials for full implementation details.
 
 ## Install
 
