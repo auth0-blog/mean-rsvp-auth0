@@ -7,6 +7,7 @@ import { AdminGuard } from './auth/admin.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { CallbackComponent } from './pages/callback/callback.component';
 import { MyRsvpsComponent } from './pages/my-rsvps/my-rsvps.component';
+import { UserComponent } from './pages/users/users.component';
 
 const routes: Routes = [
   {
@@ -27,6 +28,13 @@ const routes: Routes = [
   {
     path: 'my-rsvps',
     component: MyRsvpsComponent,
+    canActivate: [
+      AuthGuard
+    ]
+  },
+  {
+    path: 'user',
+    component: UserComponent,
     canActivate: [
       AuthGuard
     ]

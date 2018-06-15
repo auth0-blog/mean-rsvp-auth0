@@ -59,7 +59,14 @@ export class ApiService {
         catchError((error) => this._handleError(error))
       );
   }
-
+  //GET users by RSVPs name (login required)
+  getRsvpsName$(): Observable<RsvpModel[]> {
+    return this.http
+      .get(`${ENV.BASE_API}rsvps`, {
+        headers: new HttpHeaders().set('Authorization', this._authHeader)
+      })
+      .catch(this._handleError);
+  }
   // POST new event (admin only)
   postEvent$(event: EventModel): Observable<EventModel> {
     return this.http
